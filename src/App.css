@@ -65,6 +65,8 @@ h1 {
   background-color: red;
   /* For browsers that do not support gradients */
   background-image: linear-gradient(to bottom right, #6338EE, #2BB2EA);
+  background-size: 200% 200%;
+  background-position: 0% 50%;
   padding: 20px 0;
 }
 
@@ -94,6 +96,7 @@ h1 {
   /* Replace with your image path */
   background-size: cover;
   background-position: center;
+  box-shadow: 0px 0px 12px 4px rgba(0, 0, 0, 0.38);
   -webkit-box-shadow: 0px 0px 12px 4px rgba(0, 0, 0, 0.38);
   margin: 20px auto;
   /* Center the headshot */
@@ -141,6 +144,7 @@ h1 {
   display: block;
   border-radius: 4px;
   border: 1px solid #ccc;
+  outline: none;
 }
 
 
@@ -153,10 +157,13 @@ h1 {
   width: 80%;
   max-width: 600px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  will-change: transform, opacity;
 }
 
 .project-card h4 {
   margin: 0 0 10px 0;
+  font-weight: bold;
 }
 
 .project-card h4 .company {
@@ -192,6 +199,7 @@ h1 {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  will-change: transform;
 }
 
 .connect-wrapper {
@@ -201,6 +209,8 @@ h1 {
   background-color: red;
   /* For browsers that do not support gradients */
   background-image: linear-gradient(to bottom right, #6338EE, #2BB2EA);
+  background-size: 200% 200%;
+  background-position: 0% 50%;
   padding: 20px 0;
 }
 
@@ -234,4 +244,5 @@ h1 {
   color: white;
   text-decoration: none;
   font-size: 1.5em;
+  will-change: transform, opacity;
 }

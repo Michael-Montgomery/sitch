@@ -1,10 +1,10 @@
-import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import projects from './data/projects';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedin, faGithub, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faSms } from '@fortawesome/free-solid-svg-icons';
+import gsap from 'gsap';
 
 function App() {
 
@@ -14,14 +14,125 @@ function App() {
   const [professionalMode, setProfessionalMode] = useState(true);
   const [projectsList, setProjectsList] = useState(projects.slice(0, 3));
   const [showAllProjects, setShowAllProjects] = useState(false);
+  const pageRef = useRef(null);
 
 
   const goToProject = (link) => {
     window.open(link, '_blank');
   };
 
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.set('.project-card', { y: 20, opacity: 0 });
+      gsap.set('.connect-links a', { y: 16, opacity: 0, scale: 0.9 });
+
+      const introTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+      introTimeline
+        .from('.home-wrapper h1', { y: -24, opacity: 0, duration: 0.8 })
+        .from('.title', { y: -14, opacity: 0, duration: 0.6 }, '-=0.45')
+        .from('.headshot-wrapper', { scale: 0.7, opacity: 0, rotate: -8, duration: 0.85 }, '-=0.45')
+        .from('.bio', { y: 18, opacity: 0, stagger: 0.14, duration: 0.65 }, '-=0.5')
+        .from('.projects-wrapper h3', { y: 10, opacity: 0, duration: 0.55 }, '-=0.2')
+        .to('.project-card', { y: 0, opacity: 1, stagger: 0.1, duration: 0.6 }, '-=0.15')
+        .to('.connect-links a', { y: 0, opacity: 1, scale: 1, stagger: 0.08, duration: 0.45 }, '-=0.25');
+
+      gsap.to(['.home-wrapper', '.connect-wrapper'], {
+        backgroundPosition: '100% 50%',
+        duration: 9,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true
+      });
+    }, pageRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        '.project-card',
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, stagger: 0.08, duration: 0.55, ease: 'power3.out' }
+      );
+
+      const cards = gsap.utils.toArray('.project-card');
+      const listeners = cards.map((card) => {
+        const handleMouseEnter = () => {
+          gsap.to(card, {
+            y: -7,
+            scale: 1.01,
+            boxShadow: '0px 14px 24px rgba(0, 0, 0, 0.18)',
+            duration: 0.24,
+            ease: 'power2.out'
+          });
+        };
+
+        const handleMouseLeave = () => {
+          gsap.to(card, {
+            y: 0,
+            scale: 1,
+            boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+            duration: 0.24,
+            ease: 'power2.out'
+          });
+        };
+
+        card.addEventListener('mouseenter', handleMouseEnter);
+        card.addEventListener('mouseleave', handleMouseLeave);
+
+        return { card, handleMouseEnter, handleMouseLeave };
+      });
+
+      return () => {
+        listeners.forEach(({ card, handleMouseEnter, handleMouseLeave }) => {
+          card.removeEventListener('mouseenter', handleMouseEnter);
+          card.removeEventListener('mouseleave', handleMouseLeave);
+        });
+      };
+    }, pageRef);
+
+    return () => ctx.revert();
+  }, [projectsList]);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        '.connect-links a',
+        { y: 12, opacity: 0, scale: 0.9 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.35, stagger: 0.06, ease: 'power2.out' }
+      );
+    }, pageRef);
+
+    return () => ctx.revert();
+  }, [professionalMode]);
+
+  useLayoutEffect(() => {
+    if (showAllProjects) {
+      return undefined;
+    }
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        '.show-all-projects-button',
+        { y: 0, scale: 1 },
+        {
+          y: -3,
+          scale: 1.04,
+          duration: 0.9,
+          ease: 'sine.inOut',
+          repeat: -1,
+          yoyo: true
+        }
+      );
+    }, pageRef);
+
+    return () => ctx.revert();
+  }, [showAllProjects]);
+
   return (
-    <><div className="home-wrapper">
+    <div ref={pageRef}><div className="home-wrapper">
       <h1>Michael Montgomery</h1>
       <p className='title'>Senior Software Engineer at Johns Hopkins University</p>
       <div className="headshot-wrapper"></div>
@@ -32,7 +143,7 @@ function App() {
       <div className='projects-wrapper'>
         <h3>Projects {showAllProjects ? <span>{projectsList.length}</span> : ''}</h3>
        {
-        showAllProjects && projectsList.length >= 3 && (
+        showAllProjects && (
            <input type="text" placeholder="Search projects..." onChange={(e) => {
           const searchTerm = e.target.value.toLowerCase();
           const filteredProjects = projects.filter(project =>
@@ -104,7 +215,7 @@ function App() {
 
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
