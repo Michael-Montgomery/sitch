@@ -4,7 +4,7 @@ import { useState } from 'react';
 import projects from './data/projects';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedin, faGithub, faInstagram } from '@fortawesome/free-brands-svg-icons';
-import { faSms } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faSms } from '@fortawesome/free-solid-svg-icons';
 
 function App() {
 
@@ -62,6 +62,13 @@ function App() {
         </select>
         {/* <p className='connect-text'>{professionalMode ? "Feel free to connect with me on LinkedIn, send me a text or check out my GitHub profile." : "Feel free to connect with me on LinkedIn, send me a text or check out my GitHub profile."}</p> */}
         <div className="connect-links">
+
+          {
+            professionalMode && (
+              <a href="mailto:michael.montgomery@jhu.edu" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faEnvelope} /></a>
+            )
+          } 
+          
 
           {
             professionalMode && (
