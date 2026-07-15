@@ -183,6 +183,17 @@ h1 {
   font-size: 0.7em;
 }
 
+.show-all-projects-button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #2BB2EA;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 .connect-wrapper {
   width: 100vw;
   height: fit-content;

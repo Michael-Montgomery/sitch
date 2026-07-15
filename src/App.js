@@ -12,7 +12,8 @@ function App() {
 
 
   const [professionalMode, setProfessionalMode] = useState(true);
-  const [projectsList, setProjectsList] = useState(projects);
+  const [projectsList, setProjectsList] = useState(projects.slice(0, 3));
+  const [showAllProjects, setShowAllProjects] = useState(false);
 
 
   const goToProject = (link) => {
@@ -29,8 +30,10 @@ function App() {
 
     </div>
       <div className='projects-wrapper'>
-        <h3>Projects<span>{projectsList.length}</span></h3>
-        <input type="text" placeholder="Search projects..." onChange={(e) => {
+        <h3>Projects {showAllProjects ? <span>{projectsList.length}</span> : ''}</h3>
+       {
+        showAllProjects && projectsList.length >= 3 && (
+           <input type="text" placeholder="Search projects..." onChange={(e) => {
           const searchTerm = e.target.value.toLowerCase();
           const filteredProjects = projects.filter(project =>
             project.title.toLowerCase().includes(searchTerm) ||
@@ -40,6 +43,8 @@ function App() {
           );
           setProjectsList(filteredProjects);
         }} />
+        )
+       }
         {projectsList.map((project, index) => (
           <div key={index} className='project-card' onClick={() => goToProject(project.link)}>
             <h4>{project.title} <span className='company'>{project.company}</span></h4>
@@ -53,6 +58,14 @@ function App() {
             </div>
           </div>
         ))}
+        {
+          !showAllProjects && projectsList.length >= 3 && (
+            <button onClick={() => {
+              setProjectsList(projects);
+              setShowAllProjects(true);
+            }} className="show-all-projects-button">Show All Projects</button>
+          )
+        }
       </div>
       <div className="connect-wrapper">
         <h3>Connect</h3>
